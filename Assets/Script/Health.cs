@@ -17,18 +17,7 @@ public class Health : MonoBehaviour
     [SerializeField] private int numberOfFlashes;
     private SpriteRenderer spriteRend;
 
-    void Start()
-    {
-        currentHealth = MaxHealth;
-        if (healthBar != null)
-        {
-            healthBar.SetMaxHealth(MaxHealth);
-        }
-        else
-        {
-            Debug.LogError("HealthBar is not assigned in the inspector");
-        }
-    }
+    
 
     void Update()
     {
