@@ -5,12 +5,10 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     // Start is called before the first frame update
-    public float speed = 50f;
     public Rigidbody2D rb;
-    public int damage = 10;
     void Start()
     {
-        rb.velocity = transform.right * speed;
+        rb.velocity = transform.right * 50 ;
     }
     
     void OnTriggerEnter2D(Collider2D hitInfo)
@@ -18,9 +16,10 @@ public class Bullet : MonoBehaviour
         EnnemyPatrol enemy = hitInfo.GetComponent<EnnemyPatrol>();
         if (enemy != null)
         {
-            enemy.TakeDamage(damage);
+            enemy.TakeDamage(10);
         }
-        Debug.Log("detruit");
+        Destroy(gameObject);
+        Debug.Log("BalleDetruit");
     }
     
 }

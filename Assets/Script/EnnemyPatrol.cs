@@ -48,5 +48,6 @@ public class EnnemyPatrol : MonoBehaviour
     {
         Instantiate(deathEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
+        Destroy(deathEffect, 10f);
     }
 }
