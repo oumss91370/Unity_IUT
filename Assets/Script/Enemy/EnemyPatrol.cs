@@ -14,7 +14,7 @@ public class EnemyPatrol : MonoBehaviour
     private bool movingLeft;
     
     [Header("Enemy Animator")]
-    private Animator animator;
+    [SerializeField]private Animator animator;
 
     private void Awake()
     {
@@ -45,7 +45,7 @@ public class EnemyPatrol : MonoBehaviour
     
     private void DircetionChange()
     {
-        animator.SetBool("moving", true);
+        animator.SetBool("moving", false);
         movingLeft = !movingLeft;
     }
 
