@@ -6,11 +6,20 @@ using UnityEngine;
 public class MeleEnemy : MonoBehaviour
 {
     [SerializeField] private float attackCooldown = 1f;
-    [SerializeField] private int dommage;
+    [SerializeField] private float range;
+    [SerializeField] private float colliderDistance;
+    [SerializeField] private int damage;
     [SerializeField] private BoxCollider2D boxCollider;
     [SerializeField] private LayerMask playerLayer;
 
     private float cooldownTimer = Mathf.Infinity;
+    private Animator animator;
+    private Health playerHealth;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     private void Update()
     {
@@ -21,22 +30,38 @@ public class MeleEnemy : MonoBehaviour
         {
             if (cooldownTimer >= attackCooldown)
             {
-                //Attck 
+                cooldownTimer = 0;
+                animator.SetTrigger("AttackCut");
             }
         }
     }
 
     private bool PlayerInSight()
     {
-        RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size,
-            0, Vector2.left, 0,playerLayer );
+        RaycastHit2D hit = Physics2D.BoxCast(
+            boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
+            new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z),
+            0, Vector2.left, 0, playerLayer);
+
+        if (hit.collider != null)
+            playerHealth = hit.transform.GetComponent<Health>();
         //Raycast pour voir si le player est dans le champ de vision
         return hit.collider != null;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color=Color.red;
-        Gizmos.DrawWireCube(boxCollider.bounds.center, boxCollider.bounds.size);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(boxCollider.bounds.center +
+                            transform.right * range * transform.localScale.x * colliderDistance
+            , new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z));
+    }
+
+    private void DamagePlayer()
+    {
+        if (PlayerInSight())
+        {
+            playerHealth.TakeDamage(damage);
+        }
     }
 }

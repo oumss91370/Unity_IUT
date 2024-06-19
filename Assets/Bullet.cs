@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
     public Rigidbody2D rb;
     void Start()
     {
-        rb.velocity = transform.right * 50f ;
+        rb.velocity = transform.right * 50 ;
     }
     
     void OnTriggerEnter2D(Collider2D hitInfo)
