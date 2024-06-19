@@ -666,6 +666,8 @@ MonoBehaviour:
   rightEdge: {fileID: 1873436719}
   enemy: {fileID: 1561629367}
   speed: 3
+  idleDuration: 3
+  animator: {fileID: 1561629365}
 --- !u!4 &758611829
 Transform:
   m_ObjectHideFlags: 0
@@ -1389,6 +1391,11 @@ MonoBehaviour:
     m_NumColorKeys: 4
     m_NumAlphaKeys: 2
   fill: {fileID: 1464620798}
+--- !u!95 &1561629365 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5291760355441135841, guid: 1d117a58ea6fa2047b7654094d1f94ed, type: 3}
+  m_PrefabInstance: {fileID: 1158547412203339665}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1561629367 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8340055377980854972, guid: 1d117a58ea6fa2047b7654094d1f94ed, type: 3}
@@ -29176,6 +29183,10 @@ PrefabInstance:
     - target: {fileID: 387674123056845978, guid: 1d117a58ea6fa2047b7654094d1f94ed, type: 3}
       propertyPath: healthBar
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1027633312195200246, guid: 1d117a58ea6fa2047b7654094d1f94ed, type: 3}
+      propertyPath: attackCooldown
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2778061887974410538, guid: 1d117a58ea6fa2047b7654094d1f94ed, type: 3}
       propertyPath: m_Name
