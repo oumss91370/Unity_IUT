@@ -11,12 +11,14 @@ public class Bullet : MonoBehaviour
         rb.velocity = transform.right * 50 ;
     }
     
-    void OnTriggerEnter2D(Collider2D hitInfo)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        EnnemyPatrol enemy = hitInfo.GetComponent<EnnemyPatrol>();
-        if (enemy != null)
+        Health enemy = collision.GetComponent<Health>();
+        if (collision.tag=="Enemy" )
         {
-            enemy.TakeDamage(10);
+            enemy.TakeDamage(30);
+            
+            Debug.Log("Touche");
         }
         Destroy(gameObject);
         Debug.Log("BalleDetruit");
