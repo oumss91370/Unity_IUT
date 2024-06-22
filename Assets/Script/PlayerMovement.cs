@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -10,19 +7,20 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController2D controller;
     public float runSpeed = 40f;
     float horizontalMove = 0f;
+    float verticalMove = 0f;
     bool jump = false;
     bool crouch = false;
-
+    public bool isClimbing = false;
 
     private void Start()
     {
-        Application.targetFrameRate = 60; // Limite les FPS à 30
+        Application.targetFrameRate = 60;
     }
 
-    // Update is called once per frame
     void Update()
     {
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+        verticalMove = Input.GetAxisRaw("Vertical") * runSpeed;
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -30,21 +28,29 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Jump");
         }
         if (Input.GetButtonDown("Crouch"))
-
         {
             crouch = true;
-        }else if (Input.GetButtonUp("Crouch"))
+        }
+        else if (Input.GetButtonUp("Crouch"))
         {
             crouch = false;
         }
-            
     }
 
-     void FixedUpdate()
+    void FixedUpdate()
     {
-        controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
+        if (isClimbing)
+        {
+            controller.Climb(verticalMove * Time.fixedDeltaTime / 2);
+        }
+        else
+        {
+            controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
+        }
+
         jump = false;
         float characterVelocity = Mathf.Abs(rb.velocity.x);
         animator.SetFloat("Speed", characterVelocity);
+        animator.SetBool("isClimbing", isClimbing);
     }
 }
