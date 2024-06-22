@@ -5,7 +5,7 @@ public class EnemyFireballHolder : MonoBehaviour
 {
    [SerializeField] private Transform enemy;
    
-   private void Uptade()
+   private void Update()
    {
        transform.localScale = enemy.localScale;
    }
