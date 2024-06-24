@@ -69,6 +69,10 @@ public class Health : MonoBehaviour
 
                 if (GetComponent<MeleEnemy>() != null)
                     GetComponent<MeleEnemy>().enabled = false;
+                
+                if (GetComponent<RangeEnemy>() != null)
+                    GetComponent<RangeEnemy>().enabled = false;
+                
                 dead = true;
             }
         }
@@ -95,5 +99,9 @@ public class Health : MonoBehaviour
         }
 
         Physics2D.IgnoreLayerCollision(10, 11, false);
+    }
+    private void Desactivate()
+    {
+        gameObject.SetActive(false);
     }
 }
