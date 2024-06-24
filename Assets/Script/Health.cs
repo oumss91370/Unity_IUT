@@ -3,8 +3,7 @@ using System.Collections;
 
 public class Health : MonoBehaviour
 {
-    [Header("Health")]
-    [SerializeField] private float startingHealth;
+    [Header("Health")] [SerializeField] private float startingHealth;
     public float currentHealth { get; private set; }
     private Animator anim;
     private bool dead;
@@ -12,21 +11,12 @@ public class Health : MonoBehaviour
 
     public int MaxHealth = 100;
 
-    [Header("iFrames")]
-    [SerializeField] private float iFramesDuration;
+    [Header("iFrames")] [SerializeField] private float iFramesDuration;
     [SerializeField] private int numberOfFlashes;
+
     private SpriteRenderer spriteRend;
 
     
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            TakeDamage(20);
-        }
-    }
-
     private void Awake()
     {
         currentHealth = startingHealth;
@@ -59,6 +49,7 @@ public class Health : MonoBehaviour
             {
                 anim.SetTrigger("hurt");
             }
+
             StartCoroutine(Invunerability());
         }
         else
@@ -69,7 +60,21 @@ public class Health : MonoBehaviour
                 {
                     anim.SetTrigger("die");
                 }
-                GetComponent<PlayerMovement>().enabled = false;
+
+                // Player
+                if (GetComponent<PlayerMovement>() != null)
+                    GetComponent<PlayerMovement>().enabled = false;
+                //Enemy
+                if (GetComponentInParent<EnemyPatrol>() != null)
+                    GetComponentInParent<EnemyPatrol>().enabled = false;
+
+                if (GetComponent<MeleEnemy>() != null)
+                    GetComponent<MeleEnemy>().enabled = false;
+                
+                if (GetComponent<RangeEnemy>() != null)
+                    GetComponent<RangeEnemy>().enabled = false;
+                
+
                 dead = true;
             }
         }
@@ -94,6 +99,11 @@ public class Health : MonoBehaviour
             spriteRend.color = Color.white;
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
         }
+
         Physics2D.IgnoreLayerCollision(10, 11, false);
+    }
+    private void Desactivate()
+    {
+        gameObject.SetActive(false);
     }
 }
