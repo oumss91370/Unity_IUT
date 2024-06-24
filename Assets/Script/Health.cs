@@ -13,9 +13,10 @@ public class Health : MonoBehaviour
 
     [Header("iFrames")] [SerializeField] private float iFramesDuration;
     [SerializeField] private int numberOfFlashes;
+
     private SpriteRenderer spriteRend;
 
-
+    
     private void Awake()
     {
         currentHealth = startingHealth;
@@ -64,11 +65,19 @@ public class Health : MonoBehaviour
                 if (GetComponent<PlayerMovement>() != null)
                     GetComponent<PlayerMovement>().enabled = false;
                 //Enemy
-                if (GetComponentInParent<EnemyPatrol>()  != null)
+                if (GetComponentInParent<EnemyPatrol>() != null)
                     GetComponentInParent<EnemyPatrol>().enabled = false;
 
                 if (GetComponent<MeleEnemy>() != null)
                     GetComponent<MeleEnemy>().enabled = false;
+                
+                if (GetComponent<RangeEnemy>() != null)
+                    GetComponent<RangeEnemy>().enabled = false;
+                
+                /*foreach (Behaviour component in components)
+                {
+                    component.enabled = false;                      
+                }*/
                 dead = true;
             }
         }
@@ -95,5 +104,9 @@ public class Health : MonoBehaviour
         }
 
         Physics2D.IgnoreLayerCollision(10, 11, false);
+    }
+    private void Desactivate()
+    {
+        gameObject.SetActive(false);
     }
 }
