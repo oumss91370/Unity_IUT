@@ -74,10 +74,7 @@ public class Health : MonoBehaviour
                 if (GetComponent<RangeEnemy>() != null)
                     GetComponent<RangeEnemy>().enabled = false;
                 
-                /*foreach (Behaviour component in components)
-                {
-                    component.enabled = false;                      
-                }*/
+
                 dead = true;
             }
         }
