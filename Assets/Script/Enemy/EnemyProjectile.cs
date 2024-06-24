@@ -32,10 +32,7 @@ public class EnemyProjectile : EnemyDamage
         base.OnTriggerEnter2D(collision); //Execute logic from parent script first
         gameObject.SetActive(false); //When this hits any object deactivate arrow
         
-        if (animator != null)
-            animator.SetTrigger("eplode");
-        else 
-            gameObject.SetActive(false);
+       
             
     }
 
