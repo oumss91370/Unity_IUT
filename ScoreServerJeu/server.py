@@ -2,43 +2,45 @@ import socket
 import threading
 import sqlite3
 
-# Connexion à la base de données SQLite
+# Connect to the SQLite database
 conn = sqlite3.connect('scores.db', check_same_thread=False)
 cursor = conn.cursor()
 
-# Créer la table des scores si elle n'existe pas
+# Create the scores table if it doesn't exist
 cursor.execute('''CREATE TABLE IF NOT EXISTS scores
                   (id INTEGER PRIMARY KEY, name TEXT, score INTEGER)''')
 conn.commit()
 
-# Fonction pour gérer les connexions des clients
+# Function to handle client connections
 def handle_client(client_socket):
     try:
-        # Réception des données du client
-        data = client_socket.recv(1024).decode('utf-8')
+        # Receive data from the client
+        data = client_socket.recv(1024).decode('utf-8').strip()
         if data:
-            # Vérifier si la commande est pour obtenir les scores
+            # Check if the command is to get scores
             if data == "GET_SCORES":
                 print("Received request to get scores")
-                # Récupérer les 10 meilleurs scores
+                # Retrieve the top 10 scores
                 cursor.execute('SELECT name, score FROM scores ORDER BY score DESC LIMIT 10')
                 top_scores = cursor.fetchall()
-                # Construire la réponse
+                print(f"Top scores: {top_scores}")  # Debug print
+                # Build the response
                 response = "\n".join([f"{s[0]}:{s[1]}" for s in top_scores])
+                print(f"Response: {response}")  # Debug print
                 client_socket.send(response.encode('utf-8'))
             else:
-                # Parsing de la chaîne de caractères pour extraire le nom et le score
+                # Parse the data to extract name and score
                 if ':' in data:
                     name, score = data.split(':')
                     score = int(score)
                     print(f"Received score data: Name={name}, Score={score}")
-                    # Insertion du score dans la base de données
+                    # Insert the score into the database
                     cursor.execute('INSERT INTO scores (name, score) VALUES (?, ?)', (name, score))
                     conn.commit()
-                    # Récupérer les 10 meilleurs scores
+                    # Retrieve the top 10 scores
                     cursor.execute('SELECT name, score FROM scores ORDER BY score DESC LIMIT 10')
                     top_scores = cursor.fetchall()
-                    # Construire la réponse
+                    # Build the response
                     response = "\n".join([f"{s[0]}:{s[1]}" for s in top_scores])
                     client_socket.send(response.encode('utf-8'))
                 else:
@@ -48,13 +50,13 @@ def handle_client(client_socket):
     finally:
         client_socket.close()
 
-# Configuration du serveur
+# Configure the server
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(("0.0.0.0", 9999))
 server.listen(5)
 print("Server listening on port 9999")
 
-# Boucle pour accepter les connexions des clients
+# Loop to accept client connections
 while True:
     client_socket, addr = server.accept()
     print(f"Accepted connection from {addr}")
