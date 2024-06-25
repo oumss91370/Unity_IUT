@@ -24,7 +24,7 @@ public class ScoreClient : MonoBehaviour
         }
         catch (SocketException e)
         {
-            Debug.Log("SocketException: " + e);
+            Debug.LogError("SocketException: " + e);
         }
     }
 
@@ -38,6 +38,7 @@ public class ScoreClient : MonoBehaviour
         string scoreData = playerName + ":" + score.ToString();
         byte[] data = Encoding.UTF8.GetBytes(scoreData);
         stream.Write(data, 0, data.Length);
+        Debug.Log("Score data sent: " + scoreData);
 
         // Lire la réponse du serveur
         byte[] responseData = new byte[1024];

@@ -19,6 +19,7 @@ def handle_client(client_socket):
         if data:
             # Vérifier si la commande est pour obtenir les scores
             if data == "GET_SCORES":
+                print("Received request to get scores")
                 # Récupérer les 10 meilleurs scores
                 cursor.execute('SELECT name, score FROM scores ORDER BY score DESC LIMIT 10')
                 top_scores = cursor.fetchall()
@@ -30,6 +31,7 @@ def handle_client(client_socket):
                 if ':' in data:
                     name, score = data.split(':')
                     score = int(score)
+                    print(f"Received score data: Name={name}, Score={score}")
                     # Insertion du score dans la base de données
                     cursor.execute('INSERT INTO scores (name, score) VALUES (?, ?)', (name, score))
                     conn.commit()

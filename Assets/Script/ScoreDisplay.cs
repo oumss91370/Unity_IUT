@@ -30,6 +30,8 @@ public class ScoreDisplay : MonoBehaviour
             int bytes = stream.Read(responseData, 0, responseData.Length);
             string response = Encoding.UTF8.GetString(responseData, 0, bytes);
 
+            Debug.Log("Received scores from server: " + response);
+
             // Afficher les scores
             DisplayScores(response);
 
@@ -38,7 +40,7 @@ public class ScoreDisplay : MonoBehaviour
         }
         catch (SocketException e)
         {
-            Debug.Log("SocketException: " + e);
+            Debug.LogError("SocketException: " + e);
         }
     }
 
@@ -47,7 +49,12 @@ public class ScoreDisplay : MonoBehaviour
         string[] scoreEntries = scores.Split('\n');
         for (int i = 0; i < scoreEntries.Length && i < scoreTexts.Length; i++)
         {
-            scoreTexts[i].text = scoreEntries[i];
+            string[] entry = scoreEntries[i].Split(':');
+            if (entry.Length == 2)
+            {
+                scoreTexts[i].text = $"{entry[0]} - {entry[1]}";
+                Debug.Log($"Score {i + 1}: {scoreEntries[i]}");
+            }
         }
     }
 }
