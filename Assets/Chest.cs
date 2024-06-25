@@ -4,7 +4,8 @@ public class Chest : MonoBehaviour
 {
     public bool IsInRange;
     public Animator animator;
-    public KeyManager keyManager; // Référence au script KeyManager qui gère les clés
+    public KeyManager keyManager;
+    public bool isOpened = false;
 
     void Awake()
     {
@@ -25,10 +26,19 @@ public class Chest : MonoBehaviour
 
     void OpenChest()
     {
-        animator.SetTrigger("OpenChest");
-        
-        // Collecte une clé en appelant la fonction dans KeyManager
-        keyManager.CollectKey();
+        // Vérifiez si le coffre a déjà été ouvert
+        if (!isOpened)
+        {
+            animator.SetTrigger("OpenChest");
+
+            // Collecte une clé en appelant la fonction dans KeyManager
+            keyManager.CollectKey();
+            isOpened = true; // Marquez le coffre comme ouvert
+        }
+        else
+        {
+            Debug.Log("Chest already opened.");
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
