@@ -29,6 +29,11 @@ public class GameController : MonoBehaviour
         UpdateScoreUI();
     }
 
+    public int GetScore()
+    {
+        return score;
+    }
+
     void UpdateScoreUI()
     {
         if (scoreText != null)
@@ -66,6 +71,16 @@ public class GameController : MonoBehaviour
         else
         {
             Debug.LogError("ScoreClient not found!");
+        }
+    }
+
+    public void OnLevelComplete()
+    {
+        if (!isGameOver)
+        {
+            isGameOver = true;
+            SendScore();
+            Invoke("EndLevel", 2.0f); // Attendre 2 secondes avant de changer de scène
         }
     }
 
