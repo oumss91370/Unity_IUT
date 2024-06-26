@@ -48,6 +48,10 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    public void OnCrouching(bool isCrouching)
+    {
+        animator.SetBool("isCrounch", isCrouching);
+    }
 
     void FixedUpdate()
     {
