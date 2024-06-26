@@ -23,6 +23,11 @@ public class KeyManager : MonoBehaviour
         Debug.Log("Key Collected! Total Keys: " + keyCount);
     }
 
+    public int GetKeyCount()
+    {
+        return keyCount;
+    }
+
     void UpdateKeyCountUI()
     {
         if (keyCountText != null)
