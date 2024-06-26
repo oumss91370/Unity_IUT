@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Ladder : MonoBehaviour
 {
-    public bool IsInRange;
+    private bool isInRange;
     private PlayerMovement playerMovement;
-    public BoxCollider2D boxCollider; // Assurez-vous que cela est public
+    public BoxCollider2D ladderTrigger; // Le BoxCollider2D enfant
 
     void Awake()
     {
@@ -22,32 +22,25 @@ public class Ladder : MonoBehaviour
             Debug.LogError("Player object with tag 'Player' not found.");
         }
 
-        // Assurez-vous que boxCollider est bien assigné dans l'inspecteur
-        if (boxCollider == null)
+        if (ladderTrigger == null)
         {
-            Debug.LogError("BoxCollider2D is not assigned. Please assign it in the inspector.");
+            Debug.LogError("Ladder Trigger is not assigned. Please assign it in the inspector.");
         }
     }
 
     void Update()
     {
-        if (playerMovement != null)
+        if (playerMovement != null && isInRange)
         {
-            if (IsInRange && Input.GetKey(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                playerMovement.isClimbing = true;
-                if (boxCollider != null)
-                {
-                    boxCollider.isTrigger = true; // Activer le mode "trigger" pendant l'escalade
-                }
+                playerMovement.StartClimbing();
+                ladderTrigger.enabled = false; // Désactiver le BoxCollider2D enfant pendant l'escalade
             }
-            else if (!IsInRange || Input.GetKeyUp(KeyCode.E))
+            else if (Input.GetKeyUp(KeyCode.E))
             {
-                playerMovement.isClimbing = false;
-                if (boxCollider != null)
-                {
-                    boxCollider.isTrigger = false; // Désactiver le mode "trigger" après l'escalade
-                }
+                playerMovement.StopClimbing();
+                ladderTrigger.enabled = true; // Réactiver le BoxCollider2D enfant après l'escalade
             }
         }
     }
@@ -56,7 +49,8 @@ public class Ladder : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            IsInRange = true;
+            isInRange = true;
+            playerMovement.SetCurrentLadder(this);
         }
     }
 
@@ -64,11 +58,10 @@ public class Ladder : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            IsInRange = false;
-            if (boxCollider != null)
-            {
-                boxCollider.isTrigger = false; // Désactiver le mode "trigger" après avoir quitté l'échelle
-            }
+            isInRange = false;
+            playerMovement.StopClimbing();
+            playerMovement.SetCurrentLadder(null);
+            ladderTrigger.enabled = true; // Réactiver le BoxCollider2D enfant après avoir quitté l'échelle
         }
     }
 }
